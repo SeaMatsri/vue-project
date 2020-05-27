@@ -1,24 +1,54 @@
 <template>
     <div class="container">
+
+        <div class ="add-task">
+            <input id="new-task" type="text" v-model ="newTask">
+            <button type="button" @click="addTask(newTask)">Add New Task</button>
+        </div>
+
         <div class="task-zone">
             <div class="drop-zone" @drop="onDrop($event, 'todo')" @dragover.prevent @dragenter.prevent>
                 <h1>To-Do</h1>
                 <div class="drag-el" v-for="task in taskTodo" :key="task.id" draggable @dragstart="onStart($event, task)">
-                    {{ task.title }}
+                    <!-- {{ task.title }} -->
+                    <span v-if="editTask != task.id">{{ task.title }}</span>
+                    <input v-else class="edit-Task" type="text" v-model="task.title">
+                    <br>
+                    <button v-if="editTask != task.id" type="button" @click="onEdit(task)">Edit</button>
+                    <button v-else type="button" @click="editedTask(task)">Save</button>
+                    <!-- ปุ่มลบ -->
+                    <button type="button" @click="deleteTask(task)">Delete</button>
                 </div>
             </div>
+
             <div class="drop-zone" @drop="onDrop($event, 'doing')" @dragover.prevent @dragenter.prevent>
                 <h1>Doing</h1>
                 <div class="drag-el" v-for="task in taskDoing" :key="task.id" draggable @dragstart="onStart($event, task)">
-                    {{ task.title }}
+                   <!-- {{ task.title }} -->
+                    <span v-if="editTask != task.id">{{ task.title }}</span>
+                    <input v-else class="edit-Task" type="text" v-model="task.title">
+                     <br>
+                    <button v-if="editTask != task.id" type="button" @click="onEdit(task)">Edit</button>
+                    <button v-else type="button" @click="editedTask(task)">Save</button>
+                    <!-- ปุ่มลบ -->
+                    <button type="button" @click="deleteTask(task)">Delete</button>
                 </div>
             </div>
+
             <div class="drop-zone" @drop="onDrop($event, 'done')" @dragover.prevent @dragenter.prevent>
                 <h1>Done</h1>
                 <div class="drag-el" v-for="task in taskDone" :key="task.id" draggable @dragstart="onStart($event, task)">
-                    {{ task.title }}
+                   <!-- {{ task.title }} -->
+                    <span v-if="editTask != task.id">{{ task.title }}</span>
+                    <input v-else class="edit-Task" type="text" v-model="task.title">
+                    <br>
+                    <button v-if="editTask != task.id" type="button" @click="onEdit(task)">Edit</button>
+                    <button v-else type="button" @click="editedTask(task)">Save</button>
+                    <!-- ปุ่มลบ -->
+                    <button type="button" @click="deleteTask(task)">Delete</button>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -49,7 +79,9 @@ export default {
                     title: 'Item D',
                     status: 'doing'
                 }
-            ]
+            ],
+            newTask: "",
+            editTask: ""
         }
     },
     computed:{
@@ -73,6 +105,24 @@ export default {
             const taskId = e.dataTransfer.getData('taskId')
             const task = this.tasks.find(task => task.id == taskId)
             task.status = newStatus
+        },
+        addTask(newTask){
+            let newId = this.tasks.length + 1
+            this.tasks.push({ id: newId, title: newTask, status: 'todo' })
+            this.newTask=""
+        },
+        onEdit(task){
+            this.editTask = task.id
+        },
+        editedTask(updateTask){
+           const task = this.tasks.find(task => task.id == updateTask.id)
+           task.title = updateTask.title
+           this.editTask=""
+        },
+        
+        deleteTask(deleteTask){
+          this.tasks = this.tasks.filter(task => task.id != deleteTask.id)
+           
         }
     }
 }
@@ -100,5 +150,8 @@ export default {
     border-radius: 10px;
     margin: 5px auto;
     padding-top: 15px;
+}
+.add-task{
+    margin: 30px 0;
 }
 </style>
