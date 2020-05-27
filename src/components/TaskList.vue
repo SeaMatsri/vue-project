@@ -37,17 +37,17 @@ export default {
                 {
                     id: 2,
                     title: 'Item B',
-                    status: 'doing'
+                    status: 'todo'
                 },
                 {
                     id: 3,
                     title: 'Item C',
-                    status: 'doing'
+                    status: 'todo'
                 },
                 {
                     id: 4,
                     title: 'Item D',
-                    status: 'done'
+                    status: 'doing'
                 }
             ]
         }
